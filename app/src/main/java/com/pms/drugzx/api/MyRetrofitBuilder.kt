@@ -1,18 +1,22 @@
 package com.pms.drugzx.api
 
 import com.pms.drugx.api.ApiService
-import com.pms.drugzx.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.logging.Level
 
 object MyRetrofitBuilder {
 
-    const val BASE_URL: String = "http://10.0.2.2:8080/"
+  const val BASE_URL: String = "http://c4ef4f43.ngrok.io"
+   //const val BASE_URL: String = "http://10.0.2.2:8762/"
     // Create Logger
-    private val logger = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+    private val logger = run {
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        httpLoggingInterceptor.apply {
+            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
 
     // Create OkHttp Client
     private val okHttp = OkHttpClient.Builder().addInterceptor(logger)

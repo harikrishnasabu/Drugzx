@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 
@@ -18,6 +20,7 @@ import com.pms.drugzx.databinding.FragmentOrderSummaryBinding
 class OrderSummaryFragment : Fragment(),View.OnClickListener {
 
     private var _binding: FragmentOrderSummaryBinding? = null
+    private lateinit var viewModel:OrderSummaryVM
     private val binding get() = _binding!!
     lateinit var navController: NavController
     override fun onCreateView(
@@ -29,9 +32,19 @@ class OrderSummaryFragment : Fragment(),View.OnClickListener {
         val view = binding.root
         return view
     }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
+        viewModel = ViewModelProvider(this).get(OrderSummaryVM::class.java)
+
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.getOrderDetails().observe(viewLifecycleOwner, Observer {
+
+_binding?.tvCustNameValue?.text =it.customerName
+            _binding?.tvItemCountValue ?.text =""
+        })
         navController = Navigation.findNavController(view)
         view.findViewById<Button>(R.id.btn_place_order).setOnClickListener(this)
     }

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -49,9 +50,9 @@ class SelectedProductsFragment : Fragment() ,View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecyclerView()
-        println("SelectedProducts"+viewModel.getProducts().toString())
-        recyclerAdapter.setProductList(viewModel.getProducts())
+        viewModel.getSelectedProducts()?.let {
+            initRecyclerView()
+            recyclerAdapter.setProductList(it) }
         navController = Navigation.findNavController(view)
         view.findViewById<Button>(R.id.btn_order).setOnClickListener(this)
 
@@ -60,21 +61,26 @@ class SelectedProductsFragment : Fragment() ,View.OnClickListener {
     private fun initRecyclerView() {
         rv_selected_products.apply {
             layoutManager= LinearLayoutManager(this.context)
-            val topSpacingDecorator = TopSpacingItemDecoration(30)
+            val topSpacingDecorator = TopSpacingItemDecoration(20)
             addItemDecoration(topSpacingDecorator)
-            recyclerAdapter= SelectedProductsRecyclerAdapter(viewModel)
+            val spnrList= arrayOf(1,2,3,4,5)
+            var spinnerAdapter = ArrayAdapter(
+                context, // Context
+                android.R.layout.simple_spinner_item, // Layout
+                spnrList // Array
+            )
+            recyclerAdapter= SelectedProductsRecyclerAdapter(viewModel,spinnerAdapter)
             adapter=recyclerAdapter
         }
     }
 
     override fun onClick(v: View?) {
 
+recyclerAdapter.setSelectedProducts()
 
         navController!!.navigate(
-            R.id.orderSummaryFragment
+            R.id.customerDetailsFragment
         )
-
-
     }
 
 }

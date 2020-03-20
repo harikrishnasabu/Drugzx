@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
 //        })
     }
 
-    fun navMainActivity(view: View) {
+        fun navMainActivity(view: View) {
 
         if(input_username.text.isNotEmpty()&& input_password.text.isNotEmpty()){
 

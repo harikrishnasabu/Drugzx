@@ -6,7 +6,9 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="10dp"
-    app:cardCornerRadius="2dp"
+    app:cardCornerRadius="6dp"
+    android:padding="20dp"
+    android:clipToPadding="false"
     app:cardPreventCornerOverlap="false"
     >
 
@@ -35,7 +37,8 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="10dp"
-                android:text="Product Id" />
+                android:text="Product ID"
+                />
 
             <TextView
                 android:id="@+id/tv_product_name"
@@ -60,18 +63,35 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="10dp"
                 android:text="Unit price" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="10dp"
+        android:text="Quantity :"/>
 
-            <EditText
-                android:id="@+id/product_quantity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:hint="Enter the quantity" />
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/product_quantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="10dp"
+        android:inputType="number"
+        android:hint="Enter the quantity" />
+</LinearLayout>
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

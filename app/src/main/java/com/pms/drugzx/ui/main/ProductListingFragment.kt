@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -15,7 +17,6 @@ import com.pms.drugzx.adapters.ProductsRecyclerAdapter
 import com.pms.drugzx.databinding.FragmentProductListingBinding
 import com.pms.drugzx.utils.TopSpacingItemDecoration
 import kotlinx.android.synthetic.main.fragment_product_listing.*
-
 class ProductListingFragment : Fragment() ,View.OnClickListener{
     private var _binding: FragmentProductListingBinding? = null
     private lateinit var viewModel: ProductListingVM
@@ -43,16 +44,17 @@ class ProductListingFragment : Fragment() ,View.OnClickListener{
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecyclerView()
-        println("Products"+viewModel.getProducts().toString())
-        recyclerAdapter.setProductList(viewModel.getProducts())
+        viewModel.getProducts()
+
+        viewModel._products.observe(viewLifecycleOwner, Observer {
+            initRecyclerView()
+            println("API"+it.toString())
+            recyclerAdapter.setProductList(it as ArrayList)
+
+        })
         navController = Navigation.findNavController(view)
         view.findViewById<Button>(R.id.btn_proceed).setOnClickListener(this)
-        // TODO: Use the ViewModel
-//        viewModel.getProducts().observe(viewLifecycleOwner, Observer {products->
-//            recyclerAdapter.setProductList(products)
-//            println("Product MODEL DATACHANGE: $products")
-//        })
+        view.findViewById<ImageButton>(R.id.btn_product_search).setOnClickListener(this)
 
 
     }
@@ -74,16 +76,23 @@ class ProductListingFragment : Fragment() ,View.OnClickListener{
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.btn_proceed -> {
-
-                    navController!!.navigate(
-                        R.id.selectedProductsFragment
-                    )
+                recyclerAdapter.setSelectedProducts()
+                navController!!.navigate(
+                    R.id.selectedProductsFragment
+                )
 
             }
+            R.id.btn_product_search ->{
+                viewModel.searchchProduct(binding.edtSearch.text.toString())
+            }
+            // R.id.cancel_btn -> activity!!.onBackPressed()
 
-           // R.id.cancel_btn -> activity!!.onBackPressed()
         }
+        viewModel._searchProduct.observe(viewLifecycleOwner, Observer {
+            println("API"+it.toString())
+            recyclerAdapter.setProductList(it as ArrayList)
+
+        })
     }
 
 }
-

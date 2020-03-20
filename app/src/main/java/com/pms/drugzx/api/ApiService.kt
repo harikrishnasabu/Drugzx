@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import com.pms.drugzx.datamodels.Login
+import com.pms.drugzx.datamodels.api.CustomerOrder
 import com.pms.drugzx.datamodels.api.Products
 import com.pms.drugzx.datamodels.api.User
 import org.json.JSONObject
@@ -14,20 +15,29 @@ import retrofit2.http.*
 
 interface ApiService {
 
-//    @GET("/products/{userId}")
-//    suspend fun getProducts(
-//        @Path("userId") userId: String
-//    ): List<Product>
 
-    @GET("/product/allproducts/")
+    @Headers("Content-Type: application/json")
+    @GET("product-managment-service/product/search/{pName}")
+    suspend fun searchProduct( @Path("pName") pName:String
+    ): List<Products>
+
+    @GET("product-managment-service/product/allproducts")
     suspend fun getProducts(
     ): List<Products>
 
     @Headers("Content-Type: application/json")
-    @POST("/users/login/")
+    @POST("user-managment-service/users/login")
     suspend fun getUser(@Body login:LoginPostData
 
         ):User
+
+    @Headers("Content-Type: application/json")
+    @POST("sales-managment-service/order/addorder")
+    suspend fun postOrder(@Body customerOrder: CustomerOrder
+
+    )
+
+
     data class LoginPostData(
         @SerializedName("userName") var userName: String,
         @SerializedName("password") var password: String

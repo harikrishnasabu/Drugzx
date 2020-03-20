@@ -44,7 +44,7 @@
         tools:layout="@layout/fragment_selected_products" >
         <action
             android:id="@+id/action_selectedProductsFragment_to_orderSummaryFragment"
-            app:destination="@id/orderSummaryFragment" />
+            app:destination="@id/customerDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderSummaryFragment"
@@ -56,4 +56,13 @@
         android:name="com.pms.drugzx.ui.main.EditAccountFragment"
         android:label="fragment_edit_account"
         tools:layout="@layout/fragment_edit_account" />
+    <fragment
+        android:id="@+id/customerDetailsFragment"
+        android:name="com.pms.drugzx.ui.main.CustomerDetailsFragment"
+        android:label="fragment_customer_details"
+        tools:layout="@layout/fragment_customer_details" >
+        <action
+            android:id="@+id/action_customerDetailsFragment_to_orderSummaryFragment"
+            app:destination="@id/orderSummaryFragment" />
+    </fragment>
 </navigation>
