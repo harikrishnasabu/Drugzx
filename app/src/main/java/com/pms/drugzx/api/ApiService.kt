@@ -17,23 +17,23 @@ interface ApiService {
 
 
     @Headers("Content-Type: application/json")
-    @GET("product-managment-service/product/search/{pName}")
-    suspend fun searchProduct( @Path("pName") pName:String
+    @GET("api/product-managment-service/product/search/{pName}")
+    suspend fun searchProduct( @Path("pName") pName:String, @Header("AUTH_TOKEN") token:String
     ): List<Products>
 
-    @GET("product-managment-service/product/allproducts")
-    suspend fun getProducts(
+    @GET("api/product-managment-service/product/allproducts")
+    suspend fun getProducts(@Header("AUTH_TOKEN") token:String
     ): List<Products>
 
     @Headers("Content-Type: application/json")
-    @POST("user-managment-service/users/login")
+    @POST("api/user-managment-service/users/login")
     suspend fun getUser(@Body login:LoginPostData
 
         ):User
 
     @Headers("Content-Type: application/json")
-    @POST("sales-managment-service/order/addorder")
-    suspend fun postOrder(@Body customerOrder: CustomerOrder
+    @POST("api/sales-managment-service/order/addorder")
+    suspend fun postOrder(@Body customerOrder: CustomerOrder, @Header("AUTH_TOKEN") token:String
 
     )
 

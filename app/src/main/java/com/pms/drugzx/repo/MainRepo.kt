@@ -9,6 +9,7 @@ import com.pms.drugzx.api.MyRetrofitBuilder
 import com.pms.drugzx.datamodels.Login
 import com.pms.drugzx.datamodels.api.CustomerOrder
 import com.pms.drugzx.datamodels.api.Products
+import com.pms.drugzx.datamodels.api.SalesOrder
 import com.pms.drugzx.datamodels.api.User
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -22,6 +23,9 @@ object MainRepository {
 
     var job: CompletableJob? = null
 lateinit var _selectedProducts:List<Products>
+    lateinit var _user:User
+
+    var _orderSummary:MutableLiveData<SalesOrder> = MutableLiveData()
      var _customerOrder:MutableLiveData<CustomerOrder> = MutableLiveData()
     fun getProducts(): LiveData<List<Products>>{
         job = Job()
@@ -30,7 +34,7 @@ lateinit var _selectedProducts:List<Products>
                 super.onActive()
                 job?.let{ theJob ->
                     CoroutineScope(IO + theJob).launch {
-                        val products = MyRetrofitBuilder.apiService.getProducts()
+                        val products = MyRetrofitBuilder.apiService.getProducts( _user.token)
                         withContext(Main){
                             value = products
                             println("PRODUCT"+value)
@@ -51,7 +55,7 @@ lateinit var _selectedProducts:List<Products>
                 super.onActive()
                 job?.let{ theJob ->
                     CoroutineScope(IO + theJob).launch {
-                        val list = MyRetrofitBuilder.apiService.searchProduct(search)
+                        val list = MyRetrofitBuilder.apiService.searchProduct(search, _user.token)
                         withContext(Main){
                             value = list
                             println("SEARCH"+value)
@@ -73,28 +77,10 @@ lateinit var _selectedProducts:List<Products>
                 super.onActive()
                 job?.let{ theJob ->
                     CoroutineScope(IO + theJob).launch {
-                        val user = MyRetrofitBuilder.apiService.getUser(ApiService.LoginPostData(login.userName,login.password))
-//                        user.enqueue(object: Callback<User> {
-//
-//
-//
-//                            override fun onResponse(call: Call<User>, response: Response<User>) {
-//                                if(response.isSuccessful){
-//                                    println("onResponse"+response.body().toString())
-//                                }
-//                                else{
-//                                   println("Failed to retrieve items")
-//                                }
-//                            }
-//
-//                            override fun onFailure(call: Call<User>, t: Throwable) {
-//                                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//                            }
-//
-//                        })
+                        _user = MyRetrofitBuilder.apiService.getUser(ApiService.LoginPostData(login.userName,login.password))
                         withContext(Main){
-                            value = user
-                          //  println("USER"+value)
+                            value = _user
+                            //  println("USER"+value)
                             theJob.complete()
                         }
                     }
@@ -110,7 +96,8 @@ lateinit var _selectedProducts:List<Products>
 
                 job?.let{ theJob ->
                     CoroutineScope(IO + theJob).launch {
-                        val addCustomer = MyRetrofitBuilder.apiService.postOrder(_customerOrder.value!!)
+                        val addCustomer = MyRetrofitBuilder.apiService.postOrder(_customerOrder.value!!,
+                            _user.token)
                         withContext(Main){
 
                             println("customerOrder"+addCustomer.toString())

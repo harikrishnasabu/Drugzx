@@ -13,6 +13,7 @@ import androidx.navigation.Navigation
 
 import com.pms.drugzx.R
 import com.pms.drugzx.databinding.FragmentOrderSummaryBinding
+import com.pms.drugzx.utils.DateUtils
 
 /**
  * A simple [Fragment] subclass.
@@ -40,10 +41,21 @@ class OrderSummaryFragment : Fragment(),View.OnClickListener {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getOrderDetails().observe(viewLifecycleOwner, Observer {
+        viewModel.getOrderSummary().observe(viewLifecycleOwner, Observer {
 
-_binding?.tvCustNameValue?.text =it.customerName
-            _binding?.tvItemCountValue ?.text =""
+_binding?.tvOrderCustomerName?.text =it.customerName
+            _binding?.tvOrderCustomerEmail?.text =it.customerEmail
+            _binding?.tvOrderCustomerPhone?.text =it.customerPhone
+            _binding?.tvOrderCustomerAddress?.text =it.customerAddress
+            _binding?.tvOrderId?.text =it.soId.toString()
+            _binding?.tvOrderSupplierId?.text =it.sellerId.toString()
+            _binding?.tvOrderDate?.text =DateUtils.convertLongToStringDate(it.soDate.toLong())
+            _binding?.tvOrderQuantity?.text =it.totalQuantity.toString()
+            _binding?.tvOrderStatus?.text =it.soStatus
+            _binding?.tvOrderSubtotal?.text =it.subTotal.toString()
+            _binding?.tvOrderTax?.text =it.tax.toString()
+            _binding?.tvOrderTotal?.text =it.total.toString()
+
         })
         navController = Navigation.findNavController(view)
         view.findViewById<Button>(R.id.btn_place_order).setOnClickListener(this)
